@@ -70,20 +70,23 @@ void PlatformManager::spawnInitial() {
 
     highestY = windowHeight - 60.f;
     lastSolidY = highestY;
-
     // Fill the rest of the initial screen with reachable platforms.
-    while (highestY > 0.f) {
+    // ... inside spawnInitial() or maintain() ...
+    while (highestY > 0.f) { // (or highestY > -Constants::MAX_VERTICAL_GAP for maintain)
         std::uniform_real_distribution<float> gapDist(Constants::MIN_VERTICAL_GAP,
-                                                      Constants::MAX_VERTICAL_GAP);
+                                                    Constants::MAX_VERTICAL_GAP);
 
         float nextY = highestY - gapDist(rng);
         bool forceSolid = false;
 
-        // If this next height would exceed the maximum reachable jump from our last solid anchor,
-        // clamp it to the maximum allowable gap and force it to be solid.
+        // Check if the gap from the LAST SOLID platform is getting too big
         if ((lastSolidY - nextY) > Constants::MAX_VERTICAL_GAP) {
             nextY = lastSolidY - Constants::MAX_VERTICAL_GAP;
+            
             forceSolid = true;
+        }
+        if (previous_broken && highestY - nextY < Constants::MIN_VERTICAL_GAP) {
+            nextY = highestY - Constants::MIN_VERTICAL_GAP;
         }
 
         highestY = nextY;
@@ -101,16 +104,19 @@ void PlatformManager::maintain() {
     // Keep generating upward while the topmost platform is still on/above screen.
     while (highestY > -Constants::MAX_VERTICAL_GAP) {
         std::uniform_real_distribution<float> gapDist(Constants::MIN_VERTICAL_GAP,
-                                                      Constants::MAX_VERTICAL_GAP);
+                                                    Constants::MAX_VERTICAL_GAP);
 
         float nextY = highestY - gapDist(rng);
         bool forceSolid = false;
 
-        // If this next height would exceed the maximum reachable jump from our last solid anchor,
-        // clamp it to the maximum allowable gap and force it to be solid.
+        // Check if the gap from the LAST SOLID platform is getting too big
         if ((lastSolidY - nextY) > Constants::MAX_VERTICAL_GAP) {
             nextY = lastSolidY - Constants::MAX_VERTICAL_GAP;
+            
             forceSolid = true;
+        }
+        if (previous_broken && highestY - nextY < Constants::MIN_VERTICAL_GAP) {
+            nextY = highestY - Constants::MIN_VERTICAL_GAP;
         }
 
         highestY = nextY;
