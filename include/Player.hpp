@@ -11,14 +11,15 @@
 // ---------------------------------------------------------------------------
 class Player {
 public:
-    Player(sf::Texture& leftTexture, sf::Texture& rightTexture, sf::Vector2f startPosition);
+    Player(sf::Texture& leftTexture, sf::Texture& rightTexture, 
+           sf::Texture& shootTex, sf::Texture& noseTex, sf::Vector2f startPosition);
 
     void handleInput();
     void update(float dt, unsigned int windowWidth);
     void render(sf::RenderWindow& window);
 
-    void applyVelocityY(float vy); // used for normal jump / spring jump
-    void moveDown(float dy);       // dragged down while riding a breaking platform
+    void applyVelocityY(float vy); 
+    void moveDown(float dy);       
 
     sf::FloatRect getBounds() const;
     sf::Vector2f getPosition() const;
@@ -31,12 +32,31 @@ public:
     void addScore(float worldScrollAmount);
     void resetScore();
 
+    // Shooting
+    bool isShooting() const { return isShootingState; }
+    sf::Vector2f getSnoutPosition() const;
+
+    // Hole suck-in physics
+    void setScale(float scaleFactor);
+    float getScale() const { return currentScale; }
+
 private:
+    void updateNosePosition();
+
     sf::Sprite sprite;
     sf::Texture& texLeft;
     sf::Texture& texRight;
+    sf::Texture& texShoot;
+
+    // Nose overlay, only drawn while shooting
+    sf::Sprite noseSprite;
+    sf::Texture& texNose;
 
     sf::Vector2f velocity{0.f, 0.f};
-    float scoreAccumulator = 0.f; // sub-integer accumulation of climbed height
+    float scoreAccumulator = 0.f;
     int score = 0;
+
+    bool isShootingState = false;
+    bool facingRight = true;
+    float currentScale = 1.0f;
 };

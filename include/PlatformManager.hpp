@@ -5,50 +5,43 @@
 #include <memory>
 #include <random>
 #include "Platform.hpp"
+#include "Monster.hpp"
+#include "Hole.hpp"
+#include "Constants.hpp"
 
-// ---------------------------------------------------------------------------
-// PlatformManager
-// Owns every active platform. Responsible for the initial layout, endless
-// randomized generation as the player climbs, scrolling the whole set down
-// (the illusion of upward movement), and pruning platforms that scrolled
-// off the bottom of the screen.
-// ---------------------------------------------------------------------------
 class PlatformManager {
 public:
     PlatformManager(unsigned int windowWidth, unsigned int windowHeight);
 
-    void reset();
+    void reset(Difficulty difficulty);
     void update(float dt);
-    void scroll(float dy); // moves every platform down by dy (world scroll)
+    void scroll(float dy); 
     void render(sf::RenderWindow& window);
 
-    // Generates new platforms above the current highest one whenever needed.
-    void maintain();
+    void maintain(Difficulty difficulty, float playerClimbingScore);
+
+    // Shared collision check function to avoid overlapping objects
+    bool isPositionValid(const sf::FloatRect& candidateBounds) const;
 
     std::vector<std::unique_ptr<Platform>>& getPlatforms() { return platforms; }
+    std::vector<std::unique_ptr<Monster>>& getMonsters() { return monsters; }
+    std::vector<std::unique_ptr<Hole>>& getHoles() { return holes; }
 
 private:
-    void spawnInitial();
-
-    // Creates a platform at height y. If forceSolid is true, the platform is
-    // guaranteed not to be breakable (used when allowing a breakable would
-    // push the gap since the last reliable platform beyond what's reachable).
-    // Reports via outIsBreakable whether the created platform is a
-    // BreakablePlatform, so callers can decide whether it's safe to treat as
-    // the new "last solid" anchor for gap generation.
-    std::unique_ptr<Platform> createRandomPlatform(float y, bool forceSolid, bool& outIsBreakable);
+    void spawnInitial(Difficulty difficulty = Difficulty::Easy);
+    std::unique_ptr<Platform> createRandomPlatform(float y, bool forceSolid, bool& outIsBreakable, Difficulty difficulty);
+    void trySpawnMonsterOrHole(float y, Difficulty difficulty, float playerClimbingScore);
 
     unsigned int windowWidth;
     unsigned int windowHeight;
 
     std::vector<std::unique_ptr<Platform>> platforms;
-    float highestY = 0.f;   // y coordinate of the topmost generated platform so far
-    float lastSolidY = 0.f; // y coordinate of the topmost NON-breakable platform so far;
-                             // gap generation is measured from this, not from highestY,
-                             // so breakable platforms are never relied on as required
-                             // stepping stones between reachable platforms.
+    std::vector<std::unique_ptr<Monster>> monsters;
+    std::vector<std::unique_ptr<Hole>> holes;
+
+    float highestY = 0.f;   
+    float lastSolidY = 0.f; 
 
     std::mt19937 rng;
-
     bool previous_broken = false;
 };

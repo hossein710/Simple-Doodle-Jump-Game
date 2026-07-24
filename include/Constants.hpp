@@ -1,9 +1,5 @@
 #pragma once
 
-// ---------------------------------------------------------------------------
-// Global, tweakable game constants. Keeping them in one place makes balancing
-// the physics (and guaranteeing platform reachability) much easier.
-// ---------------------------------------------------------------------------
 namespace Constants {
 
 // Window
@@ -11,35 +7,65 @@ constexpr unsigned int WINDOW_WIDTH  = 480;
 constexpr unsigned int WINDOW_HEIGHT = 720;
 constexpr const char*  WINDOW_TITLE  = "Doodle Jump";
 
-// Physics (pixels / second, pixels / second^2)
+// Physics
 constexpr float GRAVITY            = 900.f;
-constexpr float JUMP_VELOCITY      = -520.f; // normal bounce off a platform
-constexpr float SPRING_VELOCITY    = -900.f; // extra-strong bounce off a spring
-constexpr float PLAYER_SPEED       = 320.f;  // horizontal speed
+constexpr float JUMP_VELOCITY      = -520.f; 
+constexpr float SPRING_VELOCITY    = -900.f; 
+constexpr float MONSTER_BOUNCE_VEL = -750.f; // Strong bounce off monster
+constexpr float PLAYER_SPEED       = 320.f;  
 
 // Player
 constexpr float PLAYER_WIDTH       = 50.f;
 constexpr float PLAYER_HEIGHT      = 50.f;
+constexpr float NOSE_WIDTH  = 20.f;
+constexpr float NOSE_HEIGHT = 20.f;
 
 // Platforms
 constexpr float PLATFORM_WIDTH     = 70.f;
 constexpr float PLATFORM_HEIGHT    = 20.f;
-constexpr float MOVING_PLATFORM_SPEED = 80.f;
-constexpr float BREAK_FALL_SPEED   = 260.f; // speed a broken platform falls at
+constexpr float BREAK_FALL_SPEED   = 260.f; 
 
-// Spring
+// Base Generation Probabilities & Limits
+constexpr float SPRING_CHANCE         = 0.15f;
+constexpr float BREAKABLE_CHANCE      = 0.20f;
+constexpr float MIN_VERTICAL_GAP      = 30.f;
+constexpr float MAX_VERTICAL_GAP      = 120.f; 
+
+// Moving Platforms Speed & Chance
+constexpr float MOVING_CHANCE         = 0.25f;
+constexpr float MOVING_PLATFORM_SPEED_EASY   = 80.f;
+constexpr float MOVING_PLATFORM_SPEED_MEDIUM = 130.f;
+constexpr float MOVING_PLATFORM_SPEED_HARD   = 180.f;
+
+// Monster Spawn Chances & HP by Difficulty
+constexpr float MONSTER_SPAWN_CHANCE_EASY   = 0.10f;
+constexpr float MONSTER_SPAWN_CHANCE_MEDIUM = 0.20f;
+constexpr float MONSTER_SPAWN_CHANCE_HARD   = 0.30f;
+
+constexpr int MONSTER_HP_EASY   = 1;
+constexpr int MONSTER_HP_MEDIUM = 2;
+constexpr int MONSTER_HP_HARD   = 3;
+
+// Hole Spawn Chance (Hard Only)
+constexpr float HOLE_SPAWN_CHANCE_HARD = 0.25f;
+constexpr float BIG_HOLE_SPWAN_CHANCE_HARD = 0.15f;
+
+// Entities Stats
+constexpr float BULLET_SPEED       = 700.f;
+constexpr float BULLET_WIDTH       = 12.f;
+constexpr float BULLET_HEIGHT      = 12.f;
+
+constexpr float MONSTER_WIDTH      = 40.f;
+constexpr float MONSTER_HEIGHT     = 40.f;
+constexpr float MONSTER_SPEED      = 70.f;
+
+constexpr float HOLE_SMALL_SIZE    = 70.f;
+constexpr float HOLE_LARGE_SIZE    = 140.f;
+
+constexpr float PLAYER_SHRINK_SPEED = 60.f; // Pixels shrink per sec
+
 constexpr float SPRING_WIDTH       = 18.f;
 constexpr float SPRING_HEIGHT      = 18.f;
-
-// Platform generation
-// Reachable vertical gap is derived from the jump physics:
-//   maxJumpHeight = JUMP_VELOCITY^2 / (2 * GRAVITY)
-// We stay safely under that so the game never becomes impossible.
-constexpr float MIN_VERTICAL_GAP   = 30.f;
-constexpr float MAX_VERTICAL_GAP   = 120.f; // < theoretical max jump height (~150px)
-constexpr float MIN_HORIZONTAL_GAP = 0.5f;
-constexpr float SPRING_CHANCE      = 0.18f;   // probability a normal platform gets a spring
-constexpr float MOVING_CHANCE      = 0.18f;   // probability a generated platform is "moving"
-constexpr float BREAKABLE_CHANCE   = 0.32f;   // probability a generated platform is "breakable"
-
 } // namespace Constants
+
+enum class Difficulty { Easy, Medium, Hard };

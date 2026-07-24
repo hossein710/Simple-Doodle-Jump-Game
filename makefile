@@ -7,7 +7,7 @@
 
 CXX      := g++
 CXXFLAGS := -std=c++17 -Wall -Wextra -Iinclude
-LDFLAGS  := -lsfml-graphics -lsfml-window -lsfml-system
+LDFLAGS  := -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
 
 SRC_DIR  := src
 OBJ_DIR  := obj
