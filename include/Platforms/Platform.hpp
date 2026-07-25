@@ -41,10 +41,12 @@ public:
     void attachSpring(sf::Texture& springTexture);
     bool hasSpring() const { return spring != nullptr; }
     Spring* getSpring() { return spring.get(); }
+    bool isMovingPlatform(){return isMoving;}
 
 protected:
     sf::Sprite sprite;
     PlatformType type;
     bool alive = true;
     std::unique_ptr<Spring> spring;
+    bool isMoving = false;
 };

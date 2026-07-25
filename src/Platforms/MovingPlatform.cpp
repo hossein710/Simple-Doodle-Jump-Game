@@ -3,7 +3,7 @@
 MovingPlatform::MovingPlatform(sf::Texture& texture, sf::Vector2f position,
                                 unsigned int windowWidth, float speed)
     : Platform(texture, position, PlatformType::Moving),
-      direction(1.f), speed(speed), windowWidth(windowWidth) {}
+      direction(1.f), speed(speed), windowWidth(windowWidth) {isMoving = true;}
 
 void MovingPlatform::update(float dt) {
     sf::FloatRect bounds = getBounds();

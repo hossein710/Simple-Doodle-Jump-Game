@@ -39,16 +39,16 @@ constexpr float MOVING_PLATFORM_SPEED_HARD   = 180.f;
 
 // Monster Spawn Chances & HP by Difficulty
 constexpr float MONSTER_SPAWN_CHANCE_EASY   = 0.10f;
-constexpr float MONSTER_SPAWN_CHANCE_MEDIUM = 0.20f;
-constexpr float MONSTER_SPAWN_CHANCE_HARD   = 0.30f;
+constexpr float MONSTER_SPAWN_CHANCE_MEDIUM = 0.25f;
+constexpr float MONSTER_SPAWN_CHANCE_HARD   = 0.40f;
 
 constexpr int MONSTER_HP_EASY   = 1;
 constexpr int MONSTER_HP_MEDIUM = 2;
 constexpr int MONSTER_HP_HARD   = 3;
 
 // Hole Spawn Chance (Hard Only)
-constexpr float HOLE_SPAWN_CHANCE_HARD = 0.25f;
-constexpr float BIG_HOLE_SPWAN_CHANCE_HARD = 0.15f;
+constexpr float HOLE_SPAWN_CHANCE_HARD = 0.15f;
+constexpr float BIG_HOLE_SPWAN_CHANCE_HARD = 0.08f;
 
 // Entities Stats
 constexpr float BULLET_SPEED       = 700.f;

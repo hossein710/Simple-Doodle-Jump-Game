@@ -9,6 +9,7 @@
 #include "SoundManager.hpp"
 #include "SettingsManager.hpp"
 #include "Constants.hpp"
+#include "TempMessage.hpp"
 
 enum class GameState { Menu, Settings, Playing, GameOver };
 
@@ -79,4 +80,6 @@ private:
     bool isDraggingSlider = false;
 
     sf::RectangleShape gameOverOverlay;
+
+    TempMessage popup;
 };

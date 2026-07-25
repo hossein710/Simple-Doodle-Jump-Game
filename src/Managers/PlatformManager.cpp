@@ -23,6 +23,10 @@ void PlatformManager::reset(Difficulty difficulty) {
 bool PlatformManager::isPositionValid(const sf::FloatRect& candidateBounds) const {
     for (const auto& p : platforms) {
         if (p->getBounds().intersects(candidateBounds)) return false;
+        if (p->isMovingPlatform()){
+            sf::FloatRect candidateBounds2(0.f, candidateBounds.top, Constants::WINDOW_WIDTH, candidateBounds.height);
+            if (p->getBounds().intersects(candidateBounds2)) return false;
+        }
     }
     for (const auto& m : monsters) {
         if (m->getBounds().intersects(candidateBounds)) return false;
@@ -133,7 +137,7 @@ void PlatformManager::trySpawnMonsterOrHole(float y, Difficulty difficulty, floa
     else if (difficulty == Difficulty::Hard && chance(rng) < Constants::BIG_HOLE_SPWAN_CHANCE_HARD) {
         float x = xDist(rng);
         float sz = Constants::HOLE_LARGE_SIZE;
-        sf::FloatRect bounds(x - sz / 2.f, y - sz / 2.f, sz, sz);
+        sf::FloatRect bounds(x - sz / 2.f, y - sz / 2.f, sz+4.f, sz+4.f);
         if (isPositionValid(bounds)) {
             holes.push_back(std::make_unique<Hole>(textures.get("assets/hole@2x.png"), sf::Vector2f(x, y), sz));
         }
@@ -141,7 +145,7 @@ void PlatformManager::trySpawnMonsterOrHole(float y, Difficulty difficulty, floa
     else if (difficulty == Difficulty::Hard && chance(rng) < Constants::HOLE_SPAWN_CHANCE_HARD) {
         float x = xDist(rng);
         float sz = Constants::HOLE_SMALL_SIZE;
-        sf::FloatRect bounds(x - sz / 2.f, y - sz / 2.f, sz, sz);
+        sf::FloatRect bounds(x - sz / 2.f, y - sz / 2.f, sz+4.f, sz+4.f);
         if (isPositionValid(bounds)) {
             holes.push_back(std::make_unique<Hole>(textures.get("assets/hole.png"), sf::Vector2f(x, y), sz));
         }

@@ -70,6 +70,11 @@ Game::Game()
     volumeText.setCharacterSize(20);
     volumeText.setFillColor(sf::Color::Black);
 
+    popup.setFont(font);
+    popup.setPosition(180.f, 10.f);
+    popup.setCharacterSize(20);
+    popup.setColor(sf::Color::Green);
+
     // Difficulty selector boxes (Easy / Medium / Hard) laid out in a row
     {
         const char* labels[NUM_DIFFICULTIES] = {"Easy", "Medium", "Hard"};
@@ -245,7 +250,7 @@ void Game::update(float dt) {
             for (auto& m : platformManager->getMonsters()) {
                 if (!m->isDead() && m->getBounds().intersects(b->getBounds())) {
                     m->takeDamage(1);
-                    if(m->isDead()) player->addScore(200.f);
+                    if(m->isDead()){ player->addScore(200.f); popup.show("+200 points!", 2.0f);}
                     return true; // Delete bullet on hit
                 }
             }
@@ -297,6 +302,7 @@ void Game::checkCollisions() {
                 SoundManager::instance().playSound("sounds/Jumping_Sound.wav");
                 m->takeDamage(99); // Instantly defeat monster on top bounce
                 player->addScore(200.f);
+                popup.show("+200 points!", 2.0f);
                 return;
             } else {
                 // Side or bottom contact causes game over
@@ -360,6 +366,7 @@ void Game::checkGameOver() {
         settingsManager.updateHighScore(player->getScore());
         settingsManager.save();
     }
+    popup.update();
 }
 
 void Game::render() {
@@ -441,6 +448,7 @@ void Game::render() {
         for (auto& b : bullets) b->render(window);
         player->render(window);
         window.draw(scoreText);
+        popup.draw(window);
     } 
     else if (state == GameState::GameOver) {
         platformManager->render(window);
